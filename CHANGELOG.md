@@ -7,14 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Add `types` field in package.json
+
 ## [0.0.1] - 2024-09-02
 
 - First release
 
-## [0.0.0]
-
 [Unreleased]: https://github.com/kou029w/websri
-[0.0.0]: https://github.com/kou029w/websri
-
-[unreleased]: https://github.com/kou029w/usri/compare/v0.0.1...HEAD
 [0.0.1]: https://github.com/kou029w/usri/releases/tag/v0.0.1
