@@ -1,12 +1,12 @@
 {
-  "name": "subresourceintegrity",
+  "name": "websri",
   "version": "0.0.0",
-  "description": "Subresource Integrity",
+  "description": "A universal Subresource Integrity (SRI) utility for Node.js, browsers, Cloudflare Workers, Deno, Bun, and other web-compatible runtimes.",
   "license": "MIT",
   "author": "Kohei Watanabe <nebel@fogtype.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kou029w/subresourceintegrity.git"
+    "url": "https://github.com/kou029w/websri.git"
   },
   "type": "module",
   "exports": {

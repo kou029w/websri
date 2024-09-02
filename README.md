@@ -1,8 +1,8 @@
-# subresourceintegrity
+# websri
 
-[![NPM Version](https://img.shields.io/npm/v/subresourceintegrity)](https://www.npmjs.com/package/subresourceintegrity) [![jsDocs.io](https://img.shields.io/badge/jsDocs.io-reference-blue)](https://www.jsdocs.io/package/subresourceintegrity)
+[![NPM Version](https://img.shields.io/npm/v/websri)](https://www.npmjs.com/package/websri) [![jsDocs.io](https://img.shields.io/badge/jsDocs.io-reference-blue)](https://www.jsdocs.io/package/websri)
 
-`subresourceintegrity` is a utility designed for Subresource Integrity that works across various web-interoperable runtimes, including Node.js, browsers, Cloudflare Workers, Deno, Bun, and others.
+`websri` is a universal Subresource Integrity (SRI) utility for Node.js, browsers, Cloudflare Workers, Deno, Bun, and other web-compatible runtimes.
 
 ## Usage
 
@@ -10,22 +10,22 @@ Install package:
 
 ```sh
 # npm
-npm install subresourceintegrity
+npm install websri
 
 # yarn
-yarn add subresourceintegrity
+yarn add websri
 
 # pnpm
-pnpm install subresourceintegrity
+pnpm install websri
 
 # bun
-bun install subresourceintegrity
+bun install websri
 ```
 
 [Integrity Metadata](https://www.w3.org/TR/SRI/#integrity-metadata):
 
 ```ts
-import { createIntegrityMetadata } from "subresourceintegrity";
+import { createIntegrityMetadata } from "websri";
 
 const res = new Response("Hello, world!");
 const data = await res.arrayBuffer();
@@ -37,7 +37,7 @@ console.log(integrityMetadata.toString());
 
 ## Documentation
 
-[API Reference](https://www.jsdocs.io/package/subresourceintegrity)
+[API Reference](https://www.jsdocs.io/package/websri)
 
 ## FAQ
 
@@ -47,4 +47,4 @@ console.log(integrityMetadata.toString());
 
 ## License
 
-`subresourceintegrity` is released under the MIT License.
+`websri` is released under the MIT License.

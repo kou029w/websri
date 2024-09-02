@@ -11,5 +11,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.0]
 
-[Unreleased]: https://github.com/kou029w/subresourceintegrity
-[0.0.0]: https://github.com/kou029w/subresourceintegrity
+[Unreleased]: https://github.com/kou029w/websri
+[0.0.0]: https://github.com/kou029w/websri
