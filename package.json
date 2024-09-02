@@ -9,6 +9,7 @@
     "url": "https://github.com/kou029w/websri.git"
   },
   "type": "module",
+  "types": "dist/index.d.ts",
   "exports": {
     "import": {
       "types": "./dist/index.d.ts",
