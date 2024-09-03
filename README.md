@@ -18,6 +18,9 @@ yarn add websri
 # pnpm
 pnpm install websri
 
+# deno
+deno add npm:websri
+
 # bun
 bun install websri
 ```

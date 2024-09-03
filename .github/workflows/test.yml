@@ -1,7 +1,7 @@
 name: test
 on: push
 jobs:
-  nodejs:
+  node:
     name: Node.js v${{ matrix.node-version }}
     strategy:
       matrix:
@@ -18,3 +18,25 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
+  deno:
+    name: Deno
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: latest
+      - run: deno task test
+        working-directory: runtime/deno
+  bun:
+    name: Bun
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun test
+        working-directory: runtime/bun
