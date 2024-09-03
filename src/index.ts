@@ -97,8 +97,8 @@ export async function createIntegrityMetadata(
   });
 }
 
-/** Subresource Integrity */
-export class SubresourceIntegrity extends Map<
+/** Integrity Metadata Set */
+export class IntegrityMetadataSet extends Map<
   HashAlgorithm,
   IntegrityMetadata
 > {
@@ -155,13 +155,13 @@ export class SubresourceIntegrity extends Map<
   }
 }
 
-export async function createSubresourceIntegrity(
+export async function createIntegrityMetadataSet(
   hashAlgorithms: HashAlgorithm[],
   data: ArrayBuffer,
-): Promise<SubresourceIntegrity> {
+): Promise<IntegrityMetadataSet> {
   const integrityMetadata = await Promise.all(
     hashAlgorithms.map((alg) => createIntegrityMetadata(alg, data)),
   );
 
-  return new SubresourceIntegrity(integrityMetadata.join(" "));
+  return new IntegrityMetadataSet(integrityMetadata.join(" "));
 }

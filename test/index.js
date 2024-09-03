@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
   createIntegrityMetadata,
-  createSubresourceIntegrity,
-  SubresourceIntegrity,
+  createIntegrityMetadataSet,
+  IntegrityMetadataSet,
 } from "../dist/index.js";
 
 test("createIntegrityMetadata()", async function () {
@@ -17,10 +17,10 @@ test("createIntegrityMetadata()", async function () {
   );
 });
 
-test("createSubresourceIntegrity()", async function () {
+test("createIntegrityMetadataSet()", async function () {
   const res = new Response("Hello, world!");
   const data = await res.arrayBuffer();
-  const sri = await createSubresourceIntegrity(["sha384", "sha512"], data);
+  const sri = await createIntegrityMetadataSet(["sha384", "sha512"], data);
 
   assert.strictEqual(
     sri.toString(),
@@ -28,8 +28,8 @@ test("createSubresourceIntegrity()", async function () {
   );
 });
 
-test("SubresourceIntegrity.strongest", async function () {
-  const { strongest } = new SubresourceIntegrity(`
+test("IntegrityMetadataSet.strongest", async function () {
+  const { strongest } = new IntegrityMetadataSet(`
 sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=
 sha384-VbxVaw0v4Pzlgrpf4Huq//A1ZTY4x6wNVJTCpkwL6hzFczHHwSpFzbyn9MNKCJ7r
 sha512-wVJ82JPBJHc9gRkRlwyP5uhX1t9dySJr2KFgYUwM2WOk3eorlLt9NgIe+dhl1c6ilKgt1JoLsmn1H256V/eUIQ==
