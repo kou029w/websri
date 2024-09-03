@@ -1,6 +1,6 @@
 {
   "name": "websri",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A universal Subresource Integrity (SRI) utility for Node.js, browsers, Cloudflare Workers, Deno, Bun, and other web-compatible runtimes.",
   "license": "MIT",
   "author": "Kohei Watanabe <nebel@fogtype.com>",
