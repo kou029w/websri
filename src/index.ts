@@ -84,7 +84,7 @@ export async function createIntegrityMetadata(
   if (!supportedHashAlgorithm.includes(alg)) return "";
 
   const arrayBuffer = await crypto.subtle.digest(
-    supportedHashAlgorithmName[alg.toLowerCase()],
+    supportedHashAlgorithmName[alg],
     data,
   );
 
