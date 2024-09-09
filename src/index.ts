@@ -26,7 +26,14 @@ export const IntegrityMetadataRegex =
 export const SeparatorRegex = /[^\x21-\x7e]+/;
 
 /** Integrity Metadata */
-export class IntegrityMetadata {
+export interface IIntegrityMetadata {
+  alg: PrioritizedHashAlgorithm;
+  val: string;
+  opt?: string[];
+}
+
+/** Integrity Metadata */
+export class IntegrityMetadata implements IIntegrityMetadata {
   alg: PrioritizedHashAlgorithm;
   val: string;
   opt: string[];
@@ -45,8 +52,8 @@ export class IntegrityMetadata {
     });
   }
 
-  match(integrity: { alg: PrioritizedHashAlgorithm; val: string }): boolean {
-    return integrity.alg === this.alg && integrity.val === this.val;
+  match({ alg, val }: IIntegrityMetadata): boolean {
+    return alg === this.alg && val === this.val;
   }
 
   toString(): string {
@@ -57,15 +64,11 @@ export class IntegrityMetadata {
     return this.toString();
   }
 
-  static stringify(integrity: {
-    alg: PrioritizedHashAlgorithm;
-    val: string;
-    opt: string[];
-  }): string {
-    if (!integrity.alg) return "";
-    if (!integrity.val) return "";
-    if (!(integrity.alg in supportedHashAlgorithms)) return "";
-    return `${integrity.alg}-${[integrity.val, ...integrity.opt].join("?")}`;
+  static stringify({ alg, val, opt = [] }: IIntegrityMetadata): string {
+    if (!alg) return "";
+    if (!val) return "";
+    if (!(alg in supportedHashAlgorithms)) return "";
+    return `${alg}-${[val, ...opt].join("?")}`;
   }
 }
 
@@ -133,8 +136,8 @@ export class IntegrityMetadataSet extends Map<
     return this.get(hashAlgorithm) ?? new IntegrityMetadata("");
   }
 
-  match(integrity: { alg: PrioritizedHashAlgorithm; val: string }): boolean {
-    return this.strongest.match(integrity);
+  match(integrityMetadata: IIntegrityMetadata): boolean {
+    return this.strongest.match(integrityMetadata);
   }
 
   join(separator = " ") {
