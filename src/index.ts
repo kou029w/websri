@@ -13,12 +13,12 @@ export const supportedHashAlgorithmName = {
   sha512: "SHA-512",
 } satisfies Record<HashAlgorithm, string>;
 
-export type PrioritizedHash = "" | HashAlgorithm;
+export type PrioritizedHashAlgorithm = "" | HashAlgorithm;
 
-export function getPrioritizedHash(
+export function getPrioritizedHashAlgorithm(
   a: HashAlgorithm,
   b: HashAlgorithm,
-): PrioritizedHash {
+): PrioritizedHashAlgorithm {
   if (a === b) return "";
   if (!supportedHashAlgorithm.includes(a)) return "";
   if (!supportedHashAlgorithm.includes(b)) return "";
@@ -32,7 +32,7 @@ export const SeparatorRegex = /[^\x21-\x7e]+/;
 
 /** Integrity Metadata */
 export class IntegrityMetadata {
-  alg: PrioritizedHash;
+  alg: PrioritizedHashAlgorithm;
   val: string;
   opt: string[];
 
@@ -50,7 +50,7 @@ export class IntegrityMetadata {
     });
   }
 
-  match(integrity: { alg: PrioritizedHash; val: string }): boolean {
+  match(integrity: { alg: PrioritizedHashAlgorithm; val: string }): boolean {
     return integrity.alg === this.alg && integrity.val === this.val;
   }
 
@@ -63,7 +63,7 @@ export class IntegrityMetadata {
   }
 
   static stringify(integrity: {
-    alg: PrioritizedHash;
+    alg: PrioritizedHashAlgorithm;
     val: string;
     opt: string[];
   }): string {
@@ -102,9 +102,12 @@ export class IntegrityMetadataSet extends Map<
   HashAlgorithm,
   IntegrityMetadata
 > {
-  getPrioritizedHash: (a: HashAlgorithm, b: HashAlgorithm) => PrioritizedHash;
+  getPrioritizedHashAlgorithm: (
+    a: HashAlgorithm,
+    b: HashAlgorithm,
+  ) => PrioritizedHashAlgorithm;
 
-  constructor(integrity: string, options = { getPrioritizedHash }) {
+  constructor(integrity: string, options = { getPrioritizedHashAlgorithm }) {
     super();
 
     const integrityMetadata = integrity.split(SeparatorRegex);
@@ -117,14 +120,14 @@ export class IntegrityMetadataSet extends Map<
       }
     }
 
-    this.getPrioritizedHash = options.getPrioritizedHash;
+    this.getPrioritizedHashAlgorithm = options.getPrioritizedHashAlgorithm;
   }
 
   get strongest(): IntegrityMetadata {
     const [hashAlgorithm = supportedHashAlgorithm[0]]: HashAlgorithm[] = [
       ...this.keys(),
     ].sort((a, b) => {
-      switch (this.getPrioritizedHash(a, b)) {
+      switch (this.getPrioritizedHashAlgorithm(a, b)) {
         default:
         case "":
           return 0;
@@ -138,7 +141,7 @@ export class IntegrityMetadataSet extends Map<
     return this.get(hashAlgorithm) ?? new IntegrityMetadata("");
   }
 
-  match(integrity: { alg: PrioritizedHash; val: string }): boolean {
+  match(integrity: { alg: PrioritizedHashAlgorithm; val: string }): boolean {
     return this.strongest.match(integrity);
   }
 
