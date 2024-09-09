@@ -30,15 +30,15 @@ export const IntegrityMetadataRegex =
 
 export const SeparatorRegex = /[^\x21-\x7e]+/;
 
-/** Integrity Metadata */
-export interface IIntegrityMetadata {
+/** Integrity Metadata Like */
+export type IntegrityMetadataLike = {
   alg: PrioritizedHashAlgorithm;
   val: string;
   opt?: string[];
-}
+};
 
 /** Integrity Metadata */
-export class IntegrityMetadata implements IIntegrityMetadata {
+export class IntegrityMetadata implements IntegrityMetadataLike {
   alg: PrioritizedHashAlgorithm;
   val: string;
   opt: string[];
@@ -57,7 +57,7 @@ export class IntegrityMetadata implements IIntegrityMetadata {
     });
   }
 
-  match({ alg, val }: IIntegrityMetadata): boolean {
+  match({ alg, val }: IntegrityMetadataLike): boolean {
     return alg === this.alg && val === this.val;
   }
 
@@ -69,7 +69,7 @@ export class IntegrityMetadata implements IIntegrityMetadata {
     return this.toString();
   }
 
-  static stringify({ alg, val, opt = [] }: IIntegrityMetadata): string {
+  static stringify({ alg, val, opt = [] }: IntegrityMetadataLike): string {
     if (!alg) return "";
     if (!val) return "";
     if (!(alg in supportedHashAlgorithms)) return "";
@@ -147,7 +147,7 @@ export class IntegrityMetadataSet extends Map<
     return this.get(hashAlgorithm) ?? new IntegrityMetadata("");
   }
 
-  match(integrityMetadata: IIntegrityMetadata): boolean {
+  match(integrityMetadata: IntegrityMetadataLike): boolean {
     return this.strongest.match(integrityMetadata);
   }
 
