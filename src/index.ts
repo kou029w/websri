@@ -1,17 +1,12 @@
 /** Content Security Policy Level 2, section 4.2 */
 export type HashAlgorithm = "sha256" | "sha384" | "sha512";
 
-export const supportedHashAlgorithm: ReadonlyArray<HashAlgorithm> = [
-  "sha512",
-  "sha384",
-  "sha256",
-];
-
-export const supportedHashAlgorithmName = {
+/** Supported Hash Algorithms */
+export const supportedHashAlgorithms = {
   sha256: "SHA-256",
   sha384: "SHA-384",
   sha512: "SHA-512",
-} satisfies Record<HashAlgorithm, string>;
+} as const satisfies Record<HashAlgorithm, HashAlgorithmIdentifier>;
 
 export type PrioritizedHashAlgorithm = "" | HashAlgorithm;
 
@@ -20,8 +15,8 @@ export function getPrioritizedHashAlgorithm(
   b: HashAlgorithm,
 ): PrioritizedHashAlgorithm {
   if (a === b) return "";
-  if (!supportedHashAlgorithm.includes(a)) return "";
-  if (!supportedHashAlgorithm.includes(b)) return "";
+  if (!(a in supportedHashAlgorithms)) return "";
+  if (!(b in supportedHashAlgorithms)) return "";
   return a < b ? b : a;
 }
 
@@ -69,7 +64,7 @@ export class IntegrityMetadata {
   }): string {
     if (!integrity.alg) return "";
     if (!integrity.val) return "";
-    if (!supportedHashAlgorithm.includes(integrity.alg)) return "";
+    if (!(integrity.alg in supportedHashAlgorithms)) return "";
     return `${integrity.alg}-${[integrity.val, ...integrity.opt].join("?")}`;
   }
 }
@@ -81,13 +76,10 @@ export async function createIntegrityMetadata(
 ): Promise<string> {
   const alg = hashAlgorithm.toLowerCase() as HashAlgorithm;
 
-  if (!supportedHashAlgorithm.includes(alg)) return "";
+  if (!(alg in supportedHashAlgorithms)) return "";
 
-  const arrayBuffer = await crypto.subtle.digest(
-    supportedHashAlgorithmName[alg],
-    data,
-  );
-
+  const hashAlgorithmIdentifier = supportedHashAlgorithms[alg];
+  const arrayBuffer = await crypto.subtle.digest(hashAlgorithmIdentifier, data);
   const val = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
 
   return IntegrityMetadata.stringify({
@@ -124,7 +116,7 @@ export class IntegrityMetadataSet extends Map<
   }
 
   get strongest(): IntegrityMetadata {
-    const [hashAlgorithm = supportedHashAlgorithm[0]]: HashAlgorithm[] = [
+    const [hashAlgorithm = "sha512"]: ReadonlyArray<HashAlgorithm> = [
       ...this.keys(),
     ].sort((a, b) => {
       switch (this.getPrioritizedHashAlgorithm(a, b)) {
