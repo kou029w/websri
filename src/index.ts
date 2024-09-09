@@ -147,10 +147,6 @@ export class IntegrityMetadataSet extends Map<
     return this.get(hashAlgorithm) ?? new IntegrityMetadata("");
   }
 
-  match(integrityMetadata: IntegrityMetadataLike): boolean {
-    return this.strongest.match(integrityMetadata);
-  }
-
   join(separator = " ") {
     return [...this.values()].map(String).join(separator);
   }
