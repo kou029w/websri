@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Changes to type definitions and improvements to code readability
+
 ## [0.0.3] - 2024-09-03
 
 - Rename `SubresourceIntegrity` to `IntegrityMetadataSet`
@@ -22,5 +24,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.0.3]: https://github.com/kou029w/websri/compare/v0.0.2...v0.0.3
 [0.0.2]: https://github.com/kou029w/websri/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/kou029w/usri/releases/tag/v0.0.1
-
 [unreleased]: https://github.com/kou029w/websri/compare/v0.0.3...HEAD
