@@ -81,20 +81,19 @@ export async function createIntegrityMetadata(
   hashAlgorithm: HashAlgorithm,
   data: ArrayBuffer,
   opt: string[] = [],
-): Promise<string> {
+): Promise<IntegrityMetadata> {
   const alg = hashAlgorithm.toLowerCase() as HashAlgorithm;
 
-  if (!(alg in supportedHashAlgorithms)) return "";
+  if (!(alg in supportedHashAlgorithms)) {
+    return new IntegrityMetadata("");
+  }
 
   const hashAlgorithmIdentifier = supportedHashAlgorithms[alg];
   const arrayBuffer = await crypto.subtle.digest(hashAlgorithmIdentifier, data);
   const val = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+  const integrity = IntegrityMetadata.stringify({ alg, val, opt });
 
-  return IntegrityMetadata.stringify({
-    alg,
-    val,
-    opt,
-  });
+  return new IntegrityMetadata(integrity);
 }
 
 /** Integrity Metadata Set Options */
