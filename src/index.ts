@@ -10,6 +10,11 @@ export const supportedHashAlgorithms = {
 
 export type PrioritizedHashAlgorithm = "" | HashAlgorithm;
 
+export type GetPrioritizedHashAlgorithm = (
+  a: HashAlgorithm,
+  b: HashAlgorithm,
+) => PrioritizedHashAlgorithm;
+
 export function getPrioritizedHashAlgorithm(
   a: HashAlgorithm,
   b: HashAlgorithm,
@@ -92,17 +97,24 @@ export async function createIntegrityMetadata(
   });
 }
 
+/** Integrity Metadata Set Options */
+export type IntegrityMetadataSetOptions = {
+  getPrioritizedHashAlgorithm: GetPrioritizedHashAlgorithm;
+};
+
 /** Integrity Metadata Set */
 export class IntegrityMetadataSet extends Map<
   HashAlgorithm,
   IntegrityMetadata
 > {
-  getPrioritizedHashAlgorithm: (
-    a: HashAlgorithm,
-    b: HashAlgorithm,
-  ) => PrioritizedHashAlgorithm;
+  getPrioritizedHashAlgorithm: GetPrioritizedHashAlgorithm;
 
-  constructor(integrity: string, options = { getPrioritizedHashAlgorithm }) {
+  constructor(
+    integrity: string,
+    options: IntegrityMetadataSetOptions = {
+      getPrioritizedHashAlgorithm,
+    },
+  ) {
     super();
 
     const integrityMetadata = integrity.split(SeparatorRegex);
@@ -156,10 +168,13 @@ export class IntegrityMetadataSet extends Map<
 export async function createIntegrityMetadataSet(
   hashAlgorithms: HashAlgorithm[],
   data: ArrayBuffer,
+  options: IntegrityMetadataSetOptions = {
+    getPrioritizedHashAlgorithm,
+  },
 ): Promise<IntegrityMetadataSet> {
   const integrityMetadata = await Promise.all(
     hashAlgorithms.map((alg) => createIntegrityMetadata(alg, data)),
   );
 
-  return new IntegrityMetadataSet(integrityMetadata.join(" "));
+  return new IntegrityMetadataSet(integrityMetadata.join(" "), options);
 }
