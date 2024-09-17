@@ -10,11 +10,13 @@ export const supportedHashAlgorithms = {
 
 export type PrioritizedHashAlgorithm = "" | HashAlgorithm;
 
+/** [W3C Subresource Integrity getPrioritizedHashFunction(a, b)](https://www.w3.org/TR/SRI/#dfn-getprioritizedhashfunction-a-b) */
 export type GetPrioritizedHashAlgorithm = (
   a: HashAlgorithm,
   b: HashAlgorithm,
 ) => PrioritizedHashAlgorithm;
 
+/** [W3C Subresource Integrity getPrioritizedHashFunction(a, b)](https://www.w3.org/TR/SRI/#dfn-getprioritizedhashfunction-a-b) */
 export function getPrioritizedHashAlgorithm(
   a: HashAlgorithm,
   b: HashAlgorithm,
@@ -129,6 +131,7 @@ export class IntegrityMetadataSet extends Map<
     this.getPrioritizedHashAlgorithm = options.getPrioritizedHashAlgorithm;
   }
 
+  /** [W3C Subresource Integrity 3.3.4 Get the strongest metadata from set.](https://www.w3.org/TR/SRI/#get-the-strongest-metadata-from-set) */
   get strongest(): IntegrityMetadata {
     const [hashAlgorithm = "sha512"]: ReadonlyArray<HashAlgorithm> = [
       ...this.keys(),
