@@ -44,7 +44,7 @@ test("if the hash values are different, return false", function () {
   );
 });
 
-test.todo("if the hash algorithm is unsupported, return false", function () {
+test("if the hash algorithm is unsupported, return false", function () {
   const integrityMetadata = new IntegrityMetadata(
     "sha1-lDpwLQbzRZmu4fjajvn3KWAx1pk=",
   );
@@ -57,7 +57,7 @@ test.todo("if the hash algorithm is unsupported, return false", function () {
   );
 });
 
-test.todo("if null, return false", function () {
+test("if null, return false", function () {
   const integrityMetadata = new IntegrityMetadata(null);
 
   assert.strictEqual(
@@ -66,13 +66,13 @@ test.todo("if null, return false", function () {
   );
 });
 
-test.todo("if empty, return false", function () {
+test("if empty, return false", function () {
   const integrityMetadata = new IntegrityMetadata("");
 
   assert.strictEqual(integrityMetadata.match(new IntegrityMetadata("")), false);
 });
 
-test.todo("if invalid value, return false", function () {
+test("if invalid value, return false", function () {
   const integrityMetadata = new IntegrityMetadata("md5\0/..invalid-value");
 
   assert.strictEqual(

@@ -70,7 +70,11 @@ export class IntegrityMetadata implements IntegrityMetadataLike {
     });
   }
 
-  match({ alg, val }: IntegrityMetadataLike): boolean {
+  match(integrity: IntegrityMetadataLike | string | null | undefined): boolean {
+    const { alg, val } = new IntegrityMetadata(integrity);
+    if (!alg) return false;
+    if (!val) return false;
+    if (!(alg in supportedHashAlgorithms)) return false;
     return alg === this.alg && val === this.val;
   }
 
