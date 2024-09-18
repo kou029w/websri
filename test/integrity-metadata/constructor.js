@@ -50,7 +50,7 @@ test("accepts options", function () {
   });
 });
 
-test.todo("accepts an IntegrityMetadata like object as input", function () {
+test("accepts an IntegrityMetadata like object as input", function () {
   const integrityMetadata = new IntegrityMetadata({
     alg: "sha256",
     val: "MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",

@@ -51,12 +51,17 @@ export class IntegrityMetadata implements IntegrityMetadataLike {
   alg: PrioritizedHashAlgorithm;
   val: string;
   opt: string[];
-  constructor(integrity: string | null | undefined) {
+  constructor(integrity: IntegrityMetadataLike | string | null | undefined) {
+    const integrityString =
+      typeof integrity === "object" && integrity !== null
+        ? IntegrityMetadata.stringify(integrity)
+        : String(integrity ?? "").trim();
+
     const {
       alg = "",
       val = "",
       opt,
-    } = IntegrityMetadataRegex.exec((integrity ?? "").trim())?.groups ?? {};
+    } = IntegrityMetadataRegex.exec(integrityString)?.groups ?? {};
 
     Object.assign(this, {
       alg,
