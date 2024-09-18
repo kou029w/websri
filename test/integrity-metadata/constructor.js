@@ -38,7 +38,7 @@ test("supports SHA-512", function () {
   });
 });
 
-test.todo("accepts options", function () {
+test("accepts options", function () {
   const integrityMetadata = new IntegrityMetadata(
     "sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=?foo?bar",
   );

@@ -35,7 +35,7 @@ export function getPrioritizedHashAlgorithm(
 }
 
 export const IntegrityMetadataRegex =
-  /^(?<alg>sha256|sha384|sha512)-(?<val>(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)(?:[?](?<opts>[\x21-\x7e]*))?$/;
+  /^(?<alg>sha256|sha384|sha512)-(?<val>(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)(?:[?](?<opt>[\x21-\x7e]*))?$/;
 
 export const SeparatorRegex = /[^\x21-\x7e]+/;
 
