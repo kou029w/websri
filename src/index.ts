@@ -22,8 +22,15 @@ export function getPrioritizedHashAlgorithm(
   b: HashAlgorithm,
 ): PrioritizedHashAlgorithm {
   if (a === b) return "";
-  if (!(a in supportedHashAlgorithms)) return "";
-  if (!(b in supportedHashAlgorithms)) return "";
+
+  if (!(a in supportedHashAlgorithms)) {
+    return b in supportedHashAlgorithms ? b : "";
+  }
+
+  if (!(b in supportedHashAlgorithms)) {
+    return a in supportedHashAlgorithms ? a : "";
+  }
+
   return a < b ? b : a;
 }
 
