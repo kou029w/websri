@@ -16,13 +16,13 @@ npm install websri
 yarn add websri
 
 # pnpm
-pnpm install websri
+pnpm add websri
 
 # deno
 deno add npm:websri
 
 # bun
-bun install websri
+bun add websri
 ```
 
 [Integrity Metadata](https://www.w3.org/TR/SRI/#integrity-metadata):
