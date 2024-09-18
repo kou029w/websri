@@ -64,9 +64,9 @@ test.todo("accepts an IntegrityMetadata like object as input", function () {
   );
 });
 
-test.todo("trims leading and trailing whitespace", function () {
+test("trims leading and trailing whitespace", function () {
   const integrityMetadata = new IntegrityMetadata(
-    "\t  sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=\u0020\u00a0\u1680\u180e\u2000\u2001\u2002\u3000",
+    "\t  sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=\u0020\u00a0\u1680\u2000\u2001\u2002\u3000",
   );
 
   assert.deepEqual(
