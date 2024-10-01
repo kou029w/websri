@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@release-it/keep-a-changelog": "5.0.0",
-    "@types/node": "22.5.4",
+    "@types/node": "22.7.4",
     "release-it": "17.6.0",
     "tsup": "8.2.4",
     "typescript": "5.5.4"
