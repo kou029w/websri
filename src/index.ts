@@ -183,6 +183,14 @@ export class IntegrityMetadataSet {
     return this.#set.length;
   }
 
+  get strongestHashAlgorithms(): ReadonlyArray<HashAlgorithm> {
+    const strongestHashAlgorithms = this.strongest
+      .map(({ alg }) => alg as HashAlgorithm)
+      .filter(Boolean);
+
+    return [...new Set(strongestHashAlgorithms)];
+  }
+
   join(separator = " "): string {
     return this.#set.map(String).join(separator);
   }
