@@ -1,22 +1,50 @@
-/** Content Security Policy Level 2, section 4.2 */
+/**
+ * Represents the available hash algorithms used for Subresource Integrity.
+ * @see {@link https://www.w3.org/TR/CSP2/#hash_algo}
+ */
 export type HashAlgorithm = "sha256" | "sha384" | "sha512";
 
-/** Supported Hash Algorithms */
+/**
+ * A constant object defining the supported hash algorithms and their corresponding string
+ * representations for cryptographic operations. These algorithms are referenced by name when
+ * working with hashing functions in Web Crypto APIs.
+ */
 export const supportedHashAlgorithms = {
+  /** SHA-256 hash algorithm */
   sha256: "SHA-256",
+  /** SHA-384 hash algorithm */
   sha384: "SHA-384",
+  /** SHA-512 hash algorithm */
   sha512: "SHA-512",
 } as const satisfies Record<HashAlgorithm, HashAlgorithmIdentifier>;
 
+/**
+ * A union type representing either an empty string or a valid hash algorithm.
+ * The empty string is used when no hash algorithm is selected or is considered equal.
+ */
 export type PrioritizedHashAlgorithm = "" | HashAlgorithm;
 
-/** [W3C Subresource Integrity getPrioritizedHashFunction(a, b)](https://www.w3.org/TR/SRI/#dfn-getprioritizedhashfunction-a-b) */
+/**
+ * Function to prioritize two hash algorithms, returning the stronger or an empty string if both
+ * are unsupported or equal.
+ * @see {@link https://www.w3.org/TR/SRI/#dfn-getprioritizedhashfunction-a-b}
+ * @param a The first hash algorithm to compare.
+ * @param b The second hash algorithm to compare.
+ * @returns The hash algorithm or an empty string if both algorithms are unsupported or equal.
+ */
 export type GetPrioritizedHashAlgorithm = (
   a: HashAlgorithm,
   b: HashAlgorithm,
 ) => PrioritizedHashAlgorithm;
 
-/** [W3C Subresource Integrity getPrioritizedHashFunction(a, b)](https://www.w3.org/TR/SRI/#dfn-getprioritizedhashfunction-a-b) */
+/**
+ * Function to prioritize two hash algorithms, returning the stronger or an empty string if both
+ * are unsupported or equal.
+ * @see {@link https://www.w3.org/TR/SRI/#dfn-getprioritizedhashfunction-a-b}
+ * @param a The first hash algorithm to compare.
+ * @param b The second hash algorithm to compare.
+ * @returns The hash algorithm or an empty string if both algorithms are unsupported or equal.
+ */
 export function getPrioritizedHashAlgorithm(
   a: HashAlgorithm,
   b: HashAlgorithm,
@@ -34,23 +62,42 @@ export function getPrioritizedHashAlgorithm(
   return a < b ? b : a;
 }
 
+/**
+ * Regular expression for matching integrity metadata format.
+ */
 export const IntegrityMetadataRegex =
   /^(?<alg>sha256|sha384|sha512)-(?<val>(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)(?:[?](?<opt>[\x21-\x7e]*))?$/;
 
+/**
+ * Regular expression for separating integrity metadata.
+ */
 export const SeparatorRegex = /[^\x21-\x7e]+/;
 
-/** Integrity Metadata Like */
+/**
+ * Represents the structure of integrity metadata used for validating resources with Subresource
+ * Integrity.
+ */
 export type IntegrityMetadataLike = {
+  /** Hash algorithm */
   alg: PrioritizedHashAlgorithm;
+  /** The base64-encoded hash value of the resource */
   val: string;
+  /** Optional additional attributes */
   opt?: string[];
 };
 
-/** Integrity Metadata */
+/**
+ * Class representing integrity metadata, consisting of a hash algorithm and hash value.
+ */
 export class IntegrityMetadata implements IntegrityMetadataLike {
   alg: PrioritizedHashAlgorithm;
   val: string;
   opt: string[];
+
+  /**
+   * Creates an instance of `IntegrityMetadata` from a given object or string.
+   * @param integrity The integrity metadata input, which can be a string or object.
+   */
   constructor(integrity: IntegrityMetadataLike | string | null | undefined) {
     const integrityString =
       typeof integrity === "object" && integrity !== null
@@ -70,6 +117,11 @@ export class IntegrityMetadata implements IntegrityMetadataLike {
     });
   }
 
+  /**
+   * Compares the current integrity metadata with another object or string.
+   * @param integrity The integrity metadata to compare with.
+   * @returns `true` if the integrity metadata matches, `false` otherwise.
+   */
   match(integrity: IntegrityMetadataLike | string | null | undefined): boolean {
     const { alg, val } = new IntegrityMetadata(integrity);
     if (!alg) return false;
@@ -78,14 +130,27 @@ export class IntegrityMetadata implements IntegrityMetadataLike {
     return alg === this.alg && val === this.val;
   }
 
+  /**
+   * Converts the integrity metadata into a string representation.
+   * @returns The string representation of the integrity metadata.
+   */
   toString(): string {
     return IntegrityMetadata.stringify(this);
   }
 
+  /**
+   * Converts the integrity metadata into a JSON string.
+   * @returns The JSON string representation of the integrity metadata.
+   */
   toJSON(): string {
     return this.toString();
   }
 
+  /**
+   * Static method to stringify an integrity metadata object.
+   * @param integrity The integrity metadata object to stringify.
+   * @returns The stringified integrity metadata.
+   */
   static stringify({ alg, val, opt = [] }: IntegrityMetadataLike): string {
     if (!alg) return "";
     if (!val) return "";
@@ -94,6 +159,13 @@ export class IntegrityMetadata implements IntegrityMetadataLike {
   }
 }
 
+/**
+ * Asynchronously creates an `IntegrityMetadata` object from a hash algorithm and data.
+ * @param hashAlgorithm The hash algorithm to use (e.g., `sha256`).
+ * @param data The data to hash (in `ArrayBuffer` format).
+ * @param opt Optional additional attributes.
+ * @returns A promise that resolves to an `IntegrityMetadata` object.
+ */
 export async function createIntegrityMetadata(
   hashAlgorithm: HashAlgorithm,
   data: ArrayBuffer,
@@ -113,18 +185,33 @@ export async function createIntegrityMetadata(
   return new IntegrityMetadata(integrity);
 }
 
-/** Integrity Metadata Set Options */
+/**
+ * Options for configuring an `IntegrityMetadataSet`.
+ */
 export type IntegrityMetadataSetOptions = {
+  /** A custom function to determine the prioritized hash algorithm. */
   getPrioritizedHashAlgorithm?: GetPrioritizedHashAlgorithm;
 };
 
-/** Integrity Metadata Set */
+/**
+ * Class representing a set of integrity metadata, used for managing multiple hash algorithms and
+ * their associated metadata.
+ */
 export class IntegrityMetadataSet {
-  /** [W3C Subresource Integrity 3.3.4 Get the strongest metadata from set.](https://www.w3.org/TR/SRI/#get-the-strongest-metadata-from-set) */
-  readonly strongest: Array<IntegrityMetadata> = [];
-
   #set: ReadonlyArray<IntegrityMetadata>;
 
+  /**
+   * The strongest (most secure) integrity metadata from the set.
+   * @see {@link https://www.w3.org/TR/SRI/#get-the-strongest-metadata-from-set}
+   */
+  readonly strongest: Array<IntegrityMetadata> = [];
+
+  /**
+   * Create an instance of `IntegrityMetadataSet` from integrity metadata or an array of integrity
+   * metadata.
+   * @param integrity The integrity metadata or an array of integrity metadata.
+   * @param options Optional configuration options for hash algorithm prioritization.
+   */
   constructor(
     integrity:
       | ReadonlyArray<IntegrityMetadataLike | string | null | undefined>
@@ -173,16 +260,26 @@ export class IntegrityMetadataSet {
     }
   }
 
+  /**
+   * Enables iteration over the set of integrity metadata.
+   * @returns A generator that yields each IntegrityMetadata object.
+   */
   *[Symbol.iterator](): Generator<IntegrityMetadata> {
     for (const integrityMetadata of this.#set) {
       yield integrityMetadata;
     }
   }
 
+  /**
+   * The number of integrity metadata entries in the set.
+   */
   get size(): number {
     return this.#set.length;
   }
 
+  /**
+   * Returns an array of the strongest supported hash algorithms in the set.
+   */
   get strongestHashAlgorithms(): ReadonlyArray<HashAlgorithm> {
     const strongestHashAlgorithms = this.strongest
       .map(({ alg }) => alg as HashAlgorithm)
@@ -191,25 +288,51 @@ export class IntegrityMetadataSet {
     return [...new Set(strongestHashAlgorithms)];
   }
 
+  /**
+   * Checks if a given integrity metadata object or string matches any in the set.
+   * @param integrity The integrity metadata to match.
+   * @returns `true` if the integrity metadata matches, `false` otherwise.
+   */
   match(integrity: IntegrityMetadataLike | string | null | undefined): boolean {
     return this.#set.some((integrityMetadata) =>
       integrityMetadata.match(integrity),
     );
   }
 
+  /**
+   * Joins the integrity metadata in the set into a single string, separated by the specified
+   * separator.
+   * @param separator The separator to use (default is a space).
+   * @returns The joined string representation of the set.
+   */
   join(separator = " "): string {
     return this.#set.map(String).join(separator);
   }
 
+  /**
+   * Converts the set of integrity metadata to a string representation.
+   * @returns The string representation of the set.
+   */
   toString(): string {
     return this.join();
   }
 
+  /**
+   * Converts the set of integrity metadata to a JSON string.
+   * @returns The JSON string representation of the set.
+   */
   toJSON(): string {
     return this.toString();
   }
 }
 
+/**
+ * Asynchronously creates an `IntegrityMetadataSet` from a set of hash algorithms and data.
+ * @param hashAlgorithms A single hash algorithm or an array of supported hash algorithms.
+ * @param data The data to hash (in `ArrayBuffer` format).
+ * @param options Optional configuration options for the metadata set.
+ * @returns A promise that resolves to an `IntegrityMetadataSet` object.
+ */
 export async function createIntegrityMetadataSet(
   hashAlgorithms: ReadonlyArray<HashAlgorithm> | HashAlgorithm,
   data: ArrayBuffer,
