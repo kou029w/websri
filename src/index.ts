@@ -115,58 +115,66 @@ export async function createIntegrityMetadata(
 
 /** Integrity Metadata Set Options */
 export type IntegrityMetadataSetOptions = {
-  getPrioritizedHashAlgorithm: GetPrioritizedHashAlgorithm;
+  getPrioritizedHashAlgorithm?: GetPrioritizedHashAlgorithm;
 };
 
 /** Integrity Metadata Set */
-export class IntegrityMetadataSet extends Map<
-  HashAlgorithm,
-  IntegrityMetadata
-> {
-  getPrioritizedHashAlgorithm: GetPrioritizedHashAlgorithm;
+export class IntegrityMetadataSet {
+  /** [W3C Subresource Integrity 3.3.4 Get the strongest metadata from set.](https://www.w3.org/TR/SRI/#get-the-strongest-metadata-from-set) */
+  readonly strongest: Array<IntegrityMetadata> = [];
+
+  #set: ReadonlyArray<IntegrityMetadata>;
 
   constructor(
-    integrity: string,
-    options: IntegrityMetadataSetOptions = {
-      getPrioritizedHashAlgorithm,
-    },
+    integrity:
+      | ReadonlyArray<IntegrityMetadataLike | string | null | undefined>
+      | IntegrityMetadataLike
+      | string
+      | null
+      | undefined,
+    {
+      getPrioritizedHashAlgorithm:
+        _getPrioritizedHashAlgorithm = getPrioritizedHashAlgorithm,
+    }: IntegrityMetadataSetOptions = {},
   ) {
-    super();
+    const set: ReadonlyArray<
+      IntegrityMetadataLike | string | null | undefined
+    > = [integrity]
+      .flat()
+      .flatMap(
+        (
+          integrity: IntegrityMetadataLike | string | null | undefined,
+        ): ReadonlyArray<IntegrityMetadataLike | string | null | undefined> =>
+          typeof integrity === "string"
+            ? integrity.split(SeparatorRegex)
+            : [integrity],
+      );
 
-    const integrityMetadata = integrity.split(SeparatorRegex);
+    this.#set = set
+      .map((integrity) => new IntegrityMetadata(integrity))
+      .filter((integrityMetadata) => integrityMetadata.toString() !== "");
 
-    for (const integrity of integrityMetadata.filter(Boolean)) {
-      const integrityMetadata = new IntegrityMetadata(integrity);
+    for (const integrityMetadata of this.#set) {
+      const [strongest = new IntegrityMetadata("")] = this.strongest;
 
-      if (integrityMetadata.alg) {
-        this.set(integrityMetadata.alg, integrityMetadata);
+      const prioritizedHashAlgorithm = _getPrioritizedHashAlgorithm(
+        strongest.alg as HashAlgorithm,
+        integrityMetadata.alg as HashAlgorithm,
+      );
+
+      switch (prioritizedHashAlgorithm) {
+        case "":
+          this.strongest.push(integrityMetadata);
+          break;
+        case integrityMetadata.alg:
+          this.strongest = [integrityMetadata];
+          break;
       }
     }
-
-    this.getPrioritizedHashAlgorithm = options.getPrioritizedHashAlgorithm;
   }
 
-  /** [W3C Subresource Integrity 3.3.4 Get the strongest metadata from set.](https://www.w3.org/TR/SRI/#get-the-strongest-metadata-from-set) */
-  get strongest(): IntegrityMetadata {
-    const [hashAlgorithm = "sha512"]: ReadonlyArray<HashAlgorithm> = [
-      ...this.keys(),
-    ].sort((a, b) => {
-      switch (this.getPrioritizedHashAlgorithm(a, b)) {
-        default:
-        case "":
-          return 0;
-        case a:
-          return -1;
-        case b:
-          return +1;
-      }
-    });
-
-    return this.get(hashAlgorithm) ?? new IntegrityMetadata("");
-  }
-
-  join(separator = " ") {
-    return [...this.values()].map(String).join(separator);
+  join(separator = " "): string {
+    return this.#set.map(String).join(separator);
   }
 
   toString(): string {
