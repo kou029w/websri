@@ -9,7 +9,7 @@ import {
 test("instantiate a new IntegrityMetadataSet", async function () {
   const res = new Response("Hello, world!");
   const data = await res.arrayBuffer();
-  const set = await createIntegrityMetadataSet(["sha256"], data);
+  const set = await createIntegrityMetadataSet("sha256", data);
 
   assert(set instanceof IntegrityMetadataSet);
 });

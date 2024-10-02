@@ -211,15 +211,15 @@ export class IntegrityMetadataSet {
 }
 
 export async function createIntegrityMetadataSet(
-  hashAlgorithms: HashAlgorithm[],
+  hashAlgorithms: ReadonlyArray<HashAlgorithm> | HashAlgorithm,
   data: ArrayBuffer,
   options: IntegrityMetadataSetOptions = {
     getPrioritizedHashAlgorithm,
   },
 ): Promise<IntegrityMetadataSet> {
-  const integrityMetadata = await Promise.all(
-    hashAlgorithms.map((alg) => createIntegrityMetadata(alg, data)),
+  const set = await Promise.all(
+    [hashAlgorithms].flat().map((alg) => createIntegrityMetadata(alg, data)),
   );
 
-  return new IntegrityMetadataSet(integrityMetadata.join(" "), options);
+  return new IntegrityMetadataSet(set, options);
 }
