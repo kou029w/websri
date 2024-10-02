@@ -1,6 +1,6 @@
 import assert from "node:assert";
 import { test } from "node:test";
-import { IntegrityMetadata } from "../../dist/index.js";
+import { IntegrityMetadata } from "../../src/index.ts";
 
 test("supports SHA-256", function () {
   const integrityMetadata = new IntegrityMetadata(
@@ -82,25 +82,25 @@ test("discards unsupported hash algorithm", function () {
     "sha1-lDpwLQbzRZmu4fjajvn3KWAx1pk=",
   );
 
-  assert.deepEqual(integrityMetadata, new IntegrityMetadata());
+  assert.deepEqual(integrityMetadata, new IntegrityMetadata(""));
 });
 
 test("discards null input", function () {
   const integrityMetadata = new IntegrityMetadata(null);
 
-  assert.deepEqual(integrityMetadata, new IntegrityMetadata());
+  assert.deepEqual(integrityMetadata, new IntegrityMetadata(""));
 });
 
 test("discards empty string input", function () {
   const integrityMetadata = new IntegrityMetadata("");
 
-  assert.deepEqual(integrityMetadata, new IntegrityMetadata());
+  assert.deepEqual(integrityMetadata, new IntegrityMetadata(""));
 });
 
 test("discards invalid value", function () {
   const integrityMetadata = new IntegrityMetadata("md5\0/..invalid-value");
 
-  assert.deepEqual(integrityMetadata, new IntegrityMetadata());
+  assert.deepEqual(integrityMetadata, new IntegrityMetadata(""));
 });
 
 test("discards invalid values in a list of multiple inputs", function () {
@@ -108,5 +108,5 @@ test("discards invalid values in a list of multiple inputs", function () {
     "sha1-lDpwLQbzRZmu4fjajvn3KWAx1pk= md5\0/..invalid-value",
   );
 
-  assert.deepEqual(integrityMetadata, new IntegrityMetadata());
+  assert.deepEqual(integrityMetadata, new IntegrityMetadata(""));
 });

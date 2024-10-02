@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { IntegrityMetadataSet } from "../../dist/index.js";
+import { IntegrityMetadataSet } from "../../src/index.ts";
 
 test("toString() can be used", function () {
   const integrityMetadataSet = new IntegrityMetadataSet(

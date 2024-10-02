@@ -1,6 +1,6 @@
 import assert from "node:assert";
 import { test } from "node:test";
-import { createIntegrityMetadata, IntegrityMetadata } from "../dist/index.js";
+import { createIntegrityMetadata, IntegrityMetadata } from "../src/index.ts";
 
 test("instantiate a new IntegrityMetadata", async function () {
   const res = new Response("Hello, world!");

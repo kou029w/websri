@@ -4,7 +4,7 @@ import {
   createIntegrityMetadataSet,
   IntegrityMetadata,
   IntegrityMetadataSet,
-} from "../dist/index.js";
+} from "../src/index.ts";
 
 test("instantiate a new IntegrityMetadataSet", async function () {
   const res = new Response("Hello, world!");

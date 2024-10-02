@@ -1,6 +1,6 @@
 import assert from "node:assert";
 import { test } from "node:test";
-import { IntegrityMetadata, IntegrityMetadataSet } from "../../dist/index.js";
+import { IntegrityMetadata, IntegrityMetadataSet } from "../../src/index.ts";
 
 test("correctly iterate over the set", function () {
   const integrityMetadataSet = new IntegrityMetadataSet(`
@@ -26,7 +26,7 @@ sha512-wVJ82JPBJHc9gRkRlwyP5uhX1t9dySJr2KFgYUwM2WOk3eorlLt9NgIe+dhl1c6ilKgt1JoLs
 });
 
 test("if the empty set, return the empty set", function () {
-  const integrityMetadataSet = new IntegrityMetadataSet();
+  const integrityMetadataSet = new IntegrityMetadataSet([]);
 
   assert.deepEqual([...integrityMetadataSet], []);
 });

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { IntegrityMetadataSet } from "../../dist/index.js";
+import { IntegrityMetadataSet } from "../../src/index.ts";
 
 test("if the hash values match, return true", function () {
   const integrityMetadata = new IntegrityMetadataSet(

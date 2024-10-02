@@ -1,6 +1,6 @@
 import assert from "node:assert";
 import { test } from "node:test";
-import { IntegrityMetadataSet } from "../../dist/index.js";
+import { IntegrityMetadataSet } from "../../src/index.ts";
 
 test("supports SHA-256", function () {
   const set = new IntegrityMetadataSet(
@@ -132,25 +132,25 @@ test("whitespace can be analyzed as entry separator", function () {
 test("discards unsupported hash algorithm", function () {
   const set = new IntegrityMetadataSet("sha1-lDpwLQbzRZmu4fjajvn3KWAx1pk=");
 
-  assert.deepEqual(set, new IntegrityMetadataSet());
+  assert.deepEqual(set, new IntegrityMetadataSet([]));
 });
 
 test("discards null input", function () {
   const set = new IntegrityMetadataSet(null);
 
-  assert.deepEqual(set, new IntegrityMetadataSet());
+  assert.deepEqual(set, new IntegrityMetadataSet([]));
 });
 
 test("discards empty string input", function () {
-  const set = new IntegrityMetadataSet("");
+  const set = new IntegrityMetadataSet([]);
 
-  assert.deepEqual(set, new IntegrityMetadataSet());
+  assert.deepEqual(set, new IntegrityMetadataSet([]));
 });
 
 test("discards invalid value", function () {
   const set = new IntegrityMetadataSet("md5\0/..invalid-value");
 
-  assert.deepEqual(set, new IntegrityMetadataSet());
+  assert.deepEqual(set, new IntegrityMetadataSet([]));
 });
 
 test("discards invalid values in a list of multiple inputs", function () {
@@ -158,5 +158,5 @@ test("discards invalid values in a list of multiple inputs", function () {
     "sha1-lDpwLQbzRZmu4fjajvn3KWAx1pk= md5\0/..invalid-value",
   );
 
-  assert.deepEqual(set, new IntegrityMetadataSet());
+  assert.deepEqual(set, new IntegrityMetadataSet([]));
 });
