@@ -40,7 +40,7 @@
   "scripts": {
     "build": "pkgroll",
     "prepublishOnly": "pkgroll",
-    "test": "tsx --test 'test/**/*.ts'",
+    "test": "tsx --test $(find test -type f)",
     "release": "release-it --"
   },
   "devDependencies": {
