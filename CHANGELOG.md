@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Changes to type definitions and improvements to code readability
+- **IntegrityMetadataSet Enhancements**: Refactored `IntegrityMetadataSet` to improve structure and flexibility, including new methods (`match`, `strongestHashAlgorithms`, `iterator`, and `size`), support for more flexible input types, and enhanced validation logic.
+- **Type Definitions & Code Readability**: Improved type definitions and enhanced overall code readability.
+- **Build & Tooling**: Replaced `tsup` with `pkgroll` and `tsx` for bundling.
 
 ## [0.0.3] - 2024-09-03
 
