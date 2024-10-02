@@ -191,6 +191,12 @@ export class IntegrityMetadataSet {
     return [...new Set(strongestHashAlgorithms)];
   }
 
+  match(integrity: IntegrityMetadataLike | string | null | undefined): boolean {
+    return this.#set.some((integrityMetadata) =>
+      integrityMetadata.match(integrity),
+    );
+  }
+
   join(separator = " "): string {
     return this.#set.map(String).join(separator);
   }
