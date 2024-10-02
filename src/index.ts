@@ -97,6 +97,19 @@ export class IntegrityMetadata implements IntegrityMetadataLike {
   /**
    * Creates an instance of `IntegrityMetadata` from a given object or string.
    * @param integrity The integrity metadata input, which can be a string or object.
+   * @example
+   * ```
+   * new IntegrityMetadata("sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=")
+   * ```
+   *
+   * or
+   *
+   * ```
+   * new IntegrityMetadata({
+   *   alg: "sha256",
+   *   val: "MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
+   * })
+   * ```
    */
   constructor(integrity: IntegrityMetadataLike | string | null | undefined) {
     const integrityString =
@@ -121,6 +134,19 @@ export class IntegrityMetadata implements IntegrityMetadataLike {
    * Compares the current integrity metadata with another object or string.
    * @param integrity The integrity metadata to compare with.
    * @returns `true` if the integrity metadata matches, `false` otherwise.
+   * @example
+   * ```
+   * integrityMetadata.match({
+   *   alg: "sha256",
+   *   val: "MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
+   * })
+   * ```
+   *
+   * or
+   *
+   * ```
+   * integrityMetadata.match("sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=")
+   * ```
    */
   match(integrity: IntegrityMetadataLike | string | null | undefined): boolean {
     const { alg, val } = new IntegrityMetadata(integrity);
@@ -150,6 +176,13 @@ export class IntegrityMetadata implements IntegrityMetadataLike {
    * Static method to stringify an integrity metadata object.
    * @param integrity The integrity metadata object to stringify.
    * @returns The stringified integrity metadata.
+   * @example
+   * ```
+   * IntegrityMetadata.stringify({
+   *   alg: "sha256",
+   *   val: "MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
+   * }) // "sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM="
+   * ```
    */
   static stringify({ alg, val, opt = [] }: IntegrityMetadataLike): string {
     if (!alg) return "";
@@ -165,6 +198,12 @@ export class IntegrityMetadata implements IntegrityMetadataLike {
  * @param data The data to hash (in `ArrayBuffer` format).
  * @param opt Optional additional attributes.
  * @returns A promise that resolves to an `IntegrityMetadata` object.
+ * @example
+ * ```
+ * const res = new Response("Hello, world!");
+ * const data = await res.arrayBuffer();
+ * const integrityMetadata = await createIntegrityMetadata("sha256", data);
+ * ```
  */
 export async function createIntegrityMetadata(
   hashAlgorithm: HashAlgorithm,
@@ -211,6 +250,24 @@ export class IntegrityMetadataSet {
    * metadata.
    * @param integrity The integrity metadata or an array of integrity metadata.
    * @param options Optional configuration options for hash algorithm prioritization.
+   * @example
+   * ```
+   * new IntegrityMetadataSet(`
+   *   sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=
+   *   sha384-VbxVaw0v4Pzlgrpf4Huq//A1ZTY4x6wNVJTCpkwL6hzFczHHwSpFzbyn9MNKCJ7r
+   *   sha512-wVJ82JPBJHc9gRkRlwyP5uhX1t9dySJr2KFgYUwM2WOk3eorlLt9NgIe+dhl1c6ilKgt1JoLsmn1H256V/eUIQ==
+   * `)
+   * ```
+   *
+   * or
+   *
+   * ```
+   * new IntegrityMetadataSet([
+   *   "sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
+   *   "sha384-VbxVaw0v4Pzlgrpf4Huq//A1ZTY4x6wNVJTCpkwL6hzFczHHwSpFzbyn9MNKCJ7r",
+   *   "sha512-wVJ82JPBJHc9gRkRlwyP5uhX1t9dySJr2KFgYUwM2WOk3eorlLt9NgIe+dhl1c6ilKgt1JoLsmn1H256V/eUIQ==",
+   * ])
+   * ```
    */
   constructor(
     integrity:
@@ -263,6 +320,10 @@ export class IntegrityMetadataSet {
   /**
    * Enables iteration over the set of integrity metadata.
    * @returns A generator that yields each IntegrityMetadata object.
+   * @example
+   * ```
+   * [...integrityMetadataSet]
+   * ```
    */
   *[Symbol.iterator](): Generator<IntegrityMetadata> {
     for (const integrityMetadata of this.#set) {
@@ -292,6 +353,19 @@ export class IntegrityMetadataSet {
    * Checks if a given integrity metadata object or string matches any in the set.
    * @param integrity The integrity metadata to match.
    * @returns `true` if the integrity metadata matches, `false` otherwise.
+   * @example
+   * ```
+   * integrityMetadataSet.match({
+   *   alg: "sha256",
+   *   val: "MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
+   * })
+   * ```
+   *
+   * or
+   *
+   * ```
+   * integrityMetadataSet.match("sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=")
+   * ```
    */
   match(integrity: IntegrityMetadataLike | string | null | undefined): boolean {
     return this.#set.some((integrityMetadata) =>
@@ -332,6 +406,12 @@ export class IntegrityMetadataSet {
  * @param data The data to hash (in `ArrayBuffer` format).
  * @param options Optional configuration options for the metadata set.
  * @returns A promise that resolves to an `IntegrityMetadataSet` object.
+ * @example
+ * ```
+ * const res = new Response("Hello, world!");
+ * const data = await res.arrayBuffer();
+ * const set = await createIntegrityMetadataSet(["sha256", "sha384", "sha512"], data);
+ * ```
  */
 export async function createIntegrityMetadataSet(
   hashAlgorithms: ReadonlyArray<HashAlgorithm> | HashAlgorithm,
