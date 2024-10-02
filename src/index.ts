@@ -173,6 +173,16 @@ export class IntegrityMetadataSet {
     }
   }
 
+  *[Symbol.iterator](): Generator<IntegrityMetadata> {
+    for (const integrityMetadata of this.#set) {
+      yield integrityMetadata;
+    }
+  }
+
+  get size(): number {
+    return this.#set.length;
+  }
+
   join(separator = " "): string {
     return this.#set.map(String).join(separator);
   }
