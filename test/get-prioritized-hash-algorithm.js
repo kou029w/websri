@@ -22,6 +22,6 @@ test("if both strings are empty, return the empty string", function () {
   assert.strictEqual(getPrioritizedHashAlgorithm("", ""), "");
 });
 
-test("if either is an empty string, it return the supported hash algorithm", function () {
+test("if either is the empty string, it return the supported hash algorithm", function () {
   assert.strictEqual(getPrioritizedHashAlgorithm("sha256", ""), "sha256");
 });
