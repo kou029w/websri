@@ -136,16 +136,16 @@ export class IntegrityMetadata implements IntegrityMetadataLike {
    * @returns `true` if the integrity metadata matches, `false` otherwise.
    * @example
    * ```js
-   * integrityMetadata.match({
-   *   alg: "sha256",
-   *   val: "MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
-   * })
+   * integrityMetadata.match("sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=")
    * ```
    *
    * or
    *
    * ```js
-   * integrityMetadata.match("sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=")
+   * integrityMetadata.match({
+   *   alg: "sha256",
+   *   val: "MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
+   * })
    * ```
    */
   match(integrity: IntegrityMetadataLike | string | null | undefined): boolean {
@@ -252,21 +252,21 @@ export class IntegrityMetadataSet {
    * @param options Optional configuration options for hash algorithm prioritization.
    * @example
    * ```js
-   * new IntegrityMetadataSet(`
-   *   sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=
-   *   sha384-VbxVaw0v4Pzlgrpf4Huq//A1ZTY4x6wNVJTCpkwL6hzFczHHwSpFzbyn9MNKCJ7r
-   *   sha512-wVJ82JPBJHc9gRkRlwyP5uhX1t9dySJr2KFgYUwM2WOk3eorlLt9NgIe+dhl1c6ilKgt1JoLsmn1H256V/eUIQ==
-   * `)
-   * ```
-   *
-   * or
-   *
-   * ```js
    * new IntegrityMetadataSet([
    *   "sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
    *   "sha384-VbxVaw0v4Pzlgrpf4Huq//A1ZTY4x6wNVJTCpkwL6hzFczHHwSpFzbyn9MNKCJ7r",
    *   "sha512-wVJ82JPBJHc9gRkRlwyP5uhX1t9dySJr2KFgYUwM2WOk3eorlLt9NgIe+dhl1c6ilKgt1JoLsmn1H256V/eUIQ==",
    * ])
+   * ```
+   *
+   * or
+   *
+   * ```js
+   * new IntegrityMetadataSet(`
+   *   sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=
+   *   sha384-VbxVaw0v4Pzlgrpf4Huq//A1ZTY4x6wNVJTCpkwL6hzFczHHwSpFzbyn9MNKCJ7r
+   *   sha512-wVJ82JPBJHc9gRkRlwyP5uhX1t9dySJr2KFgYUwM2WOk3eorlLt9NgIe+dhl1c6ilKgt1JoLsmn1H256V/eUIQ==
+   * `)
    * ```
    */
   constructor(
@@ -355,16 +355,16 @@ export class IntegrityMetadataSet {
    * @returns `true` if the integrity metadata matches, `false` otherwise.
    * @example
    * ```js
-   * integrityMetadataSet.match({
-   *   alg: "sha256",
-   *   val: "MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
-   * })
+   * integrityMetadataSet.match("sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=")
    * ```
    *
    * or
    *
    * ```js
-   * integrityMetadataSet.match("sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=")
+   * integrityMetadataSet.match({
+   *   alg: "sha256",
+   *   val: "MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
+   * })
    * ```
    */
   match(integrity: IntegrityMetadataLike | string | null | undefined): boolean {
