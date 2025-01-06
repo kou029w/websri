@@ -90,8 +90,11 @@ export type IntegrityMetadataLike = {
  * Class representing integrity metadata, consisting of a hash algorithm and hash value.
  */
 export class IntegrityMetadata implements IntegrityMetadataLike {
+  /** Hash algorithm */
   alg: PrioritizedHashAlgorithm;
+  /** The base64-encoded hash value of the resource */
   val: string;
+  /** Optional additional attributes */
   opt: string[];
 
   /**
