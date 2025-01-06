@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Improve documentation
+
 ## [0.1.0] - 2024-10-02
 
 - **IntegrityMetadataSet Enhancements**: Refactored `IntegrityMetadataSet` to improve structure and flexibility, including new methods (`match`, `strongestHashAlgorithms`, `iterator`, and `size`), support for more flexible input types, and enhanced validation logic.
