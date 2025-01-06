@@ -7,11 +7,16 @@ test("supports SHA-256", function () {
     "sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
   );
 
-  assert.deepEqual(set.strongest[0], {
-    alg: "sha256",
-    val: "MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
-    opt: [],
-  });
+  assert.deepEqual(
+    [...set],
+    [
+      {
+        alg: "sha256",
+        val: "MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
+        opt: [],
+      },
+    ],
+  );
 });
 
 test("supports SHA-384", function () {
@@ -19,11 +24,16 @@ test("supports SHA-384", function () {
     "sha384-VbxVaw0v4Pzlgrpf4Huq//A1ZTY4x6wNVJTCpkwL6hzFczHHwSpFzbyn9MNKCJ7r",
   );
 
-  assert.deepEqual(set.strongest[0], {
-    alg: "sha384",
-    val: "VbxVaw0v4Pzlgrpf4Huq//A1ZTY4x6wNVJTCpkwL6hzFczHHwSpFzbyn9MNKCJ7r",
-    opt: [],
-  });
+  assert.deepEqual(
+    [...set],
+    [
+      {
+        alg: "sha384",
+        val: "VbxVaw0v4Pzlgrpf4Huq//A1ZTY4x6wNVJTCpkwL6hzFczHHwSpFzbyn9MNKCJ7r",
+        opt: [],
+      },
+    ],
+  );
 });
 
 test("supports SHA-512", function () {
@@ -31,11 +41,16 @@ test("supports SHA-512", function () {
     "sha512-wVJ82JPBJHc9gRkRlwyP5uhX1t9dySJr2KFgYUwM2WOk3eorlLt9NgIe+dhl1c6ilKgt1JoLsmn1H256V/eUIQ==",
   );
 
-  assert.deepEqual(set.strongest[0], {
-    alg: "sha512",
-    val: "wVJ82JPBJHc9gRkRlwyP5uhX1t9dySJr2KFgYUwM2WOk3eorlLt9NgIe+dhl1c6ilKgt1JoLsmn1H256V/eUIQ==",
-    opt: [],
-  });
+  assert.deepEqual(
+    [...set],
+    [
+      {
+        alg: "sha512",
+        val: "wVJ82JPBJHc9gRkRlwyP5uhX1t9dySJr2KFgYUwM2WOk3eorlLt9NgIe+dhl1c6ilKgt1JoLsmn1H256V/eUIQ==",
+        opt: [],
+      },
+    ],
+  );
 });
 
 test("accepts options", function () {
@@ -43,11 +58,16 @@ test("accepts options", function () {
     "sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=?foo?bar",
   );
 
-  assert.deepEqual(set.strongest[0], {
-    alg: "sha256",
-    val: "MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
-    opt: ["foo", "bar"],
-  });
+  assert.deepEqual(
+    [...set],
+    [
+      {
+        alg: "sha256",
+        val: "MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
+        opt: ["foo", "bar"],
+      },
+    ],
+  );
 });
 
 test("accepts an IntegrityMetadata like object as input", function () {

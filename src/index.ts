@@ -241,12 +241,7 @@ export type IntegrityMetadataSetOptions = {
  */
 export class IntegrityMetadataSet {
   #set: ReadonlyArray<IntegrityMetadata>;
-
-  /**
-   * The strongest (most secure) integrity metadata from the set.
-   * @see {@link https://www.w3.org/TR/SRI/#get-the-strongest-metadata-from-set}
-   */
-  readonly strongest: Array<IntegrityMetadata> = [];
+  #getPrioritizedHashAlgorithm = getPrioritizedHashAlgorithm;
 
   /**
    * Create an instance of `IntegrityMetadataSet` from integrity metadata or an array of integrity
@@ -284,40 +279,23 @@ export class IntegrityMetadataSet {
         _getPrioritizedHashAlgorithm = getPrioritizedHashAlgorithm,
     }: IntegrityMetadataSetOptions = {},
   ) {
-    const set: ReadonlyArray<
-      IntegrityMetadataLike | string | null | undefined
-    > = [integrity]
+    this.#set = [integrity]
       .flat()
       .flatMap(
         (
           integrity: IntegrityMetadataLike | string | null | undefined,
-        ): ReadonlyArray<IntegrityMetadataLike | string | null | undefined> =>
-          typeof integrity === "string"
-            ? integrity.split(SeparatorRegex)
-            : [integrity],
-      );
+        ): ReadonlyArray<IntegrityMetadataLike | string | null | undefined> => {
+          if (typeof integrity === "string") {
+            return integrity.split(SeparatorRegex);
+          }
 
-    this.#set = set
+          return [integrity];
+        },
+      )
       .map((integrity) => new IntegrityMetadata(integrity))
       .filter((integrityMetadata) => integrityMetadata.toString() !== "");
 
-    for (const integrityMetadata of this.#set) {
-      const [strongest = new IntegrityMetadata("")] = this.strongest;
-
-      const prioritizedHashAlgorithm = _getPrioritizedHashAlgorithm(
-        strongest.alg as HashAlgorithm,
-        integrityMetadata.alg as HashAlgorithm,
-      );
-
-      switch (prioritizedHashAlgorithm) {
-        case "":
-          this.strongest.push(integrityMetadata);
-          break;
-        case integrityMetadata.alg:
-          this.strongest = [integrityMetadata];
-          break;
-      }
-    }
+    this.#getPrioritizedHashAlgorithm = _getPrioritizedHashAlgorithm;
   }
 
   /**
@@ -330,7 +308,7 @@ export class IntegrityMetadataSet {
    */
   *[Symbol.iterator](): Generator<IntegrityMetadata> {
     for (const integrityMetadata of this.#set) {
-      yield integrityMetadata;
+      yield new IntegrityMetadata(integrityMetadata);
     }
   }
 
@@ -342,10 +320,43 @@ export class IntegrityMetadataSet {
   }
 
   /**
+   * The strongest (most secure) integrity metadata from the set.
+   * @see {@link https://www.w3.org/TR/SRI/#get-the-strongest-metadata-from-set}
+   */
+  get strongest(): IntegrityMetadataSet {
+    let strongest = new IntegrityMetadataSet([]);
+
+    for (const integrityMetadata of this.#set) {
+      const [{ alg } = new IntegrityMetadata("")] = strongest;
+
+      const prioritizedHashAlgorithm = this.#getPrioritizedHashAlgorithm(
+        alg as HashAlgorithm,
+        integrityMetadata.alg as HashAlgorithm,
+      );
+
+      switch (prioritizedHashAlgorithm) {
+        case "":
+          strongest = new IntegrityMetadataSet([
+            ...this.strongest,
+            integrityMetadata,
+          ]);
+          break;
+        case integrityMetadata.alg:
+          strongest = new IntegrityMetadataSet(integrityMetadata);
+          break;
+        case alg:
+          break;
+      }
+    }
+
+    return strongest;
+  }
+
+  /**
    * Returns an array of the strongest supported hash algorithms in the set.
    */
   get strongestHashAlgorithms(): ReadonlyArray<HashAlgorithm> {
-    const strongestHashAlgorithms = this.strongest
+    const strongestHashAlgorithms = [...this.strongest]
       .map(({ alg }) => alg as HashAlgorithm)
       .filter(Boolean);
 
