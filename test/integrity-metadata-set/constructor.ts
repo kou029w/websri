@@ -77,10 +77,14 @@ test("accepts an IntegrityMetadata like object as input", function () {
   });
 
   assert.deepEqual(
-    set,
-    new IntegrityMetadataSet(
-      "sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
-    ),
+    [...set],
+    [
+      {
+        alg: "sha256",
+        val: "MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
+        opt: [],
+      },
+    ],
   );
 });
 
@@ -97,12 +101,14 @@ sha512-wVJ82JPBJHc9gRkRlwyP5uhX1t9dySJr2KFgYUwM2WOk3eorlLt9NgIe+dhl1c6ilKgt1JoLs
   ]);
 
   assert.deepEqual(
-    set,
-    new IntegrityMetadataSet([
-      "sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
-      "sha384-VbxVaw0v4Pzlgrpf4Huq//A1ZTY4x6wNVJTCpkwL6hzFczHHwSpFzbyn9MNKCJ7r",
-      "sha512-wVJ82JPBJHc9gRkRlwyP5uhX1t9dySJr2KFgYUwM2WOk3eorlLt9NgIe+dhl1c6ilKgt1JoLsmn1H256V/eUIQ==",
-    ]),
+    [...set],
+    [
+      ...new IntegrityMetadataSet([
+        "sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
+        "sha384-VbxVaw0v4Pzlgrpf4Huq//A1ZTY4x6wNVJTCpkwL6hzFczHHwSpFzbyn9MNKCJ7r",
+        "sha512-wVJ82JPBJHc9gRkRlwyP5uhX1t9dySJr2KFgYUwM2WOk3eorlLt9NgIe+dhl1c6ilKgt1JoLsmn1H256V/eUIQ==",
+      ]),
+    ],
   );
 });
 
@@ -113,11 +119,13 @@ test("multiple overlapping algorithms can be accepted", function () {
   ]);
 
   assert.deepEqual(
-    set,
-    new IntegrityMetadataSet([
-      "sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
-      "sha256-uU0nuZNNPgilLlLX2n2r+sSE7+N6U4DukIj3rOLvzek=",
-    ]),
+    [...set],
+    [
+      ...new IntegrityMetadataSet([
+        "sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
+        "sha256-uU0nuZNNPgilLlLX2n2r+sSE7+N6U4DukIj3rOLvzek=",
+      ]),
+    ],
   );
 });
 
@@ -127,10 +135,14 @@ test("trims leading and trailing whitespace", function () {
   );
 
   assert.deepEqual(
-    set,
-    new IntegrityMetadataSet(
-      "sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
-    ),
+    [...set],
+    [
+      {
+        alg: "sha256",
+        val: "MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
+        opt: [],
+      },
+    ],
   );
 });
 
@@ -140,37 +152,39 @@ test("whitespace can be analyzed as entry separator", function () {
   );
 
   assert.deepEqual(
-    set,
-    new IntegrityMetadataSet([
-      "sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
-      "sha384-VbxVaw0v4Pzlgrpf4Huq//A1ZTY4x6wNVJTCpkwL6hzFczHHwSpFzbyn9MNKCJ7r",
-      "sha512-wVJ82JPBJHc9gRkRlwyP5uhX1t9dySJr2KFgYUwM2WOk3eorlLt9NgIe+dhl1c6ilKgt1JoLsmn1H256V/eUIQ==",
-    ]),
+    [...set],
+    [
+      ...new IntegrityMetadataSet([
+        "sha256-MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=",
+        "sha384-VbxVaw0v4Pzlgrpf4Huq//A1ZTY4x6wNVJTCpkwL6hzFczHHwSpFzbyn9MNKCJ7r",
+        "sha512-wVJ82JPBJHc9gRkRlwyP5uhX1t9dySJr2KFgYUwM2WOk3eorlLt9NgIe+dhl1c6ilKgt1JoLsmn1H256V/eUIQ==",
+      ]),
+    ],
   );
 });
 
 test("discards unsupported hash algorithm", function () {
   const set = new IntegrityMetadataSet("sha1-lDpwLQbzRZmu4fjajvn3KWAx1pk=");
 
-  assert.deepEqual(set, new IntegrityMetadataSet([]));
+  assert.deepEqual([...set], []);
 });
 
 test("discards null input", function () {
   const set = new IntegrityMetadataSet(null);
 
-  assert.deepEqual(set, new IntegrityMetadataSet([]));
+  assert.deepEqual([...set], []);
 });
 
 test("discards empty string input", function () {
   const set = new IntegrityMetadataSet([]);
 
-  assert.deepEqual(set, new IntegrityMetadataSet([]));
+  assert.deepEqual([...set], []);
 });
 
 test("discards invalid value", function () {
   const set = new IntegrityMetadataSet("md5\0/..invalid-value");
 
-  assert.deepEqual(set, new IntegrityMetadataSet([]));
+  assert.deepEqual([...set], []);
 });
 
 test("discards invalid values in a list of multiple inputs", function () {
@@ -178,5 +192,5 @@ test("discards invalid values in a list of multiple inputs", function () {
     "sha1-lDpwLQbzRZmu4fjajvn3KWAx1pk= md5\0/..invalid-value",
   );
 
-  assert.deepEqual(set, new IntegrityMetadataSet([]));
+  assert.deepEqual([...set], []);
 });

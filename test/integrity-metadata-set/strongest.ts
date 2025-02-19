@@ -33,10 +33,7 @@ sha1-lDpwLQbzRZmu4fjajvn3KWAx1pk=
 md5-bNNVbesNpUvKBgtMOUeYOQ==
 `);
 
-  assert.deepEqual(
-    integrityMetadataSet.strongest,
-    new IntegrityMetadataSet([]),
-  );
+  assert.deepEqual([...integrityMetadataSet.strongest], []);
 });
 
 test("custom getPrioritizedHashAlgorithm function can be used", function () {
@@ -54,9 +51,13 @@ sha512-wVJ82JPBJHc9gRkRlwyP5uhX1t9dySJr2KFgYUwM2WOk3eorlLt9NgIe+dhl1c6ilKgt1JoLs
   );
 
   assert.deepEqual(
-    integrityMetadataSet.strongest,
-    new IntegrityMetadataSet(
-      "sha384-VbxVaw0v4Pzlgrpf4Huq//A1ZTY4x6wNVJTCpkwL6hzFczHHwSpFzbyn9MNKCJ7r",
-    ),
+    [...integrityMetadataSet.strongest],
+    [
+      {
+        alg: "sha384",
+        val: "VbxVaw0v4Pzlgrpf4Huq//A1ZTY4x6wNVJTCpkwL6hzFczHHwSpFzbyn9MNKCJ7r",
+        opt: [],
+      },
+    ],
   );
 });
