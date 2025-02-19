@@ -337,7 +337,7 @@ export class IntegrityMetadataSet {
       switch (prioritizedHashAlgorithm) {
         case "":
           strongest = new IntegrityMetadataSet([
-            ...this.strongest,
+            ...strongest,
             integrityMetadata,
           ]);
           break;

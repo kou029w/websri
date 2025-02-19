@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Fixed "Maximum call stack size exceeded" error when using `IntegrityMetadataSet#strongest`
+
 ## [1.0.0] - 2025-01-06
 
 - Change `strongest` property type from `Array<IntegrityMetadata>` to `IntegrityMetadataSet`
