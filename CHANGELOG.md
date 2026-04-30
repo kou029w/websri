@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Dropping support for Node.js 20
+
 ## [1.0.1] - 2025-02-19
 
 - Fixed "Maximum call stack size exceeded" error when using `IntegrityMetadataSet#strongest`
