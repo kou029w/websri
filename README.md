@@ -12,17 +12,17 @@ Install package:
 # npm
 npm install websri
 
-# yarn
-yarn add websri
-
 # pnpm
 pnpm add websri
 
-# deno
-deno add npm:websri
+# yarn
+yarn add websri
 
 # bun
 bun add websri
+
+# deno
+deno add npm:websri
 ```
 
 [Integrity Metadata](https://www.w3.org/TR/SRI/#integrity-metadata):
