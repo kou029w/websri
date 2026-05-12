@@ -34,7 +34,7 @@
     "build": "tsc",
     "test": "node --test $(find test -type f)",
     "prepack": "node --run build",
-    "version": "changie merge && git add CHANGELOG.md",
+    "version": "changie batch \"${npm_package_version}\" && changie merge && git add .changes CHANGELOG.md",
     "postpublish": "git push --follow-tags && gh release create \"v${npm_package_version}\" --notes-file \".changes/v${npm_package_version}.md\""
   },
   "devDependencies": {
