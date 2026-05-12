@@ -32,6 +32,7 @@ jobs:
           git config user.name "${GITHUB_ACTOR}"
           npm version -- "$(npx changie next "${INPUT_VERSION}" || echo "${INPUT_VERSION}")"
           npm publish
+          echo "Released $(npx changie latest)" >> "${GITHUB_STEP_SUMMARY}"
         env:
           GITHUB_ACTOR: "${{ github.actor }}"
           INPUT_VERSION: "${{ inputs.version }}"
