@@ -1,0 +1,28 @@
+changelogPath: CHANGELOG.md
+changesDir: .changes
+unreleasedDir: unreleased
+versionExt: md
+headerPath: header.md
+versionFormat: |
+  ## [{{.VersionNoPrefix}}] - {{.Time.Format "2006-01-02"}}
+kindFormat: |
+  ### {{.Kind}}
+changeFormat: |
+  - {{.Body}}
+footerFormat: |
+  [{{.VersionNoPrefix}}]: https://github.com/kou029w/websri/compare/{{.PreviousVersion}}...{{.Version}}
+kinds:
+  - label: Added
+    auto: minor
+  - label: Changed
+    auto: minor
+  - label: Deprecated
+    auto: minor
+  - label: Removed
+    auto: major
+  - label: Fixed
+    auto: patch
+  - label: Security
+    auto: patch
+newlines:
+  beforeChangelogVersion: 1

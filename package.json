@@ -39,15 +39,15 @@
   ],
   "scripts": {
     "build": "pkgroll",
-    "prepublishOnly": "pkgroll",
     "test": "node --test $(find test -type f)",
-    "release": "release-it --"
+    "prepack": "node --run build",
+    "version": "changie merge && git add CHANGELOG.md",
+    "postpublish": "git push --follow-tags && gh release create \"v${npm_package_version}\" --notes-file \".changes/v${npm_package_version}.md\""
   },
   "devDependencies": {
-    "@release-it/keep-a-changelog": "5.0.0",
     "@types/node": "22.19.15",
+    "changie": "1.24.0",
     "pkgroll": "2.20.1",
-    "release-it": "17.11.0",
     "typescript": "5.9.3"
   }
 }
