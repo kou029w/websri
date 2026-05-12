@@ -16,7 +16,7 @@ export const supportedHashAlgorithms = {
   sha384: "SHA-384",
   /** SHA-512 hash algorithm */
   sha512: "SHA-512",
-} as const satisfies Record<HashAlgorithm, HashAlgorithmIdentifier>;
+} as const satisfies Record<HashAlgorithm, string>;
 
 /**
  * A union type representing either an empty string or a valid hash algorithm.
@@ -126,11 +126,9 @@ export class IntegrityMetadata implements IntegrityMetadataLike {
       opt,
     } = IntegrityMetadataRegex.exec(integrityString)?.groups ?? {};
 
-    Object.assign(this, {
-      alg,
-      val,
-      opt: opt?.split("?") ?? [],
-    });
+    this.alg = alg as PrioritizedHashAlgorithm;
+    this.val = val;
+    this.opt = opt?.split("?") ?? [];
   }
 
   /**
