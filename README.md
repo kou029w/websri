@@ -22,7 +22,7 @@ yarn add websri
 bun add websri
 
 # deno
-deno add npm:websri
+deno add websri
 ```
 
 [Integrity Metadata](https://www.w3.org/TR/SRI/#integrity-metadata):
