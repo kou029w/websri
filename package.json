@@ -38,9 +38,9 @@
     "postpublish": "git push --follow-tags && gh release create \"v${npm_package_version}\" --notes-file \".changes/v${npm_package_version}.md\""
   },
   "devDependencies": {
-    "@tsconfig/node-lts": "24.0.0",
+    "@tsconfig/node-lts": "24.0.1",
     "@types/node": "24.13.3",
-    "changie": "1.25.1",
+    "changie": "1.26.0",
     "typescript": "7.0.2"
   }
 }
