@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@tsconfig/node-lts": "24.0.1",
-    "@types/node": "24.13.3",
+    "@types/node": "26.6.6",
     "changie": "1.26.0",
     "typescript": "7.0.2"
   }
